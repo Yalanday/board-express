@@ -5,6 +5,7 @@ body {
     sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: #000000;
 }
 
 code {
@@ -19,4 +20,13 @@ code {
 .hover-item:hover {
     opacity: 0.8;
     scale: 1.02;
+}
+
+.board-bg-radio {
+    width: 100px;
+    height: 100px;
+}
+
+.box {
+    background: none;
 }
