@@ -1,7 +1,7 @@
 import React from 'react';
 import {
     UserOutlined, DesktopOutlined,
-    FileOutlined, TeamOutlined, SettingOutlined
+HeartOutlined, TeamOutlined, SettingOutlined
 } from '@ant-design/icons';
 import type {MenuProps} from 'antd';
 import {Layout, Menu, theme} from 'antd';
@@ -35,7 +35,7 @@ const items: MenuItem[] = [
         getItem('Добавить доску', '6'),
         getItem('Активные', '8')
     ]),
-    getItem('Полезные ссылки', '9', <FileOutlined/>),
+    getItem('Избранное', '9', <HeartOutlined/>),
 ];
 
 const LeftMenu: React.FC = () => {
@@ -45,8 +45,8 @@ const LeftMenu: React.FC = () => {
 
     return (
         <>
-            <Sider width={200} style={{background: colorBgContainer,}}>
-                <Menu style={{minHeight: '100vh'}} theme="dark" defaultSelectedKeys={['1']} mode="inline"
+            <Sider width={200} style={{background: colorBgContainer, height: 'calc(100vh - 64px)'}}>
+                <Menu style={{height: '100%'}} theme="dark" defaultSelectedKeys={['1']} mode="inline"
                       items={items}/>
             </Sider>
         </>
