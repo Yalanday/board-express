@@ -4,13 +4,16 @@ import HeaderApp from "../layouts/header/header-app";
 import LeftMenu from "../layouts/left-menu/left-menu";
 import Main from "../components/main/main";
 
+const isHaveBoards = true;
+
 const Home: React.FC = () => {
+
     return (
         <Layout>
             <HeaderApp/>
             <Layout>
-                <LeftMenu/>
-                <Main/>
+                <LeftMenu />
+                <Main isHaveBoards={isHaveBoards} />
             </Layout>
         </Layout>
     );

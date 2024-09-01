@@ -1,5 +1,6 @@
-import React from 'react';
-import {Card} from 'antd';
+import React, {useState} from 'react';
+import {Card, Modal} from 'antd';
+import FormNewBoard from "../form-new-board/form-new-board";
 
 const stylesHeaderCard = {
     header: {
@@ -10,22 +11,46 @@ const stylesHeaderCard = {
 }
 
 const NoBoards = () => {
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
     return (
+        <>
             <Card
                 className="hover-item"
                 type="inner"
                 styles={stylesHeaderCard}
 
-                onClick={() => {
-                    console.log('Создать доску')
-                }}
+                onClick={showModal}
                 title="Создать доску"
-                style={{width: 300, cursor: 'pointer', borderColor: '#07233d'}}
+                style={{width: 300, cursor: 'pointer'}}
             >
                 <p>Автор:</p>
                 <p>Участники: </p>
                 <p>Срок:</p>
             </Card>
+            <Modal
+                width={330}
+                footer={null}
+                title="Создать доску"
+                open={isModalOpen}
+                onOk={handleOk}
+                onCancel={handleCancel}>
+                <FormNewBoard/>
+            </Modal>
+        </>
     );
 }
 
