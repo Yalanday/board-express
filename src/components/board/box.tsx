@@ -9,8 +9,8 @@ export const ItemTypes = {
 const style: CSSProperties = {
     position: 'absolute',
     padding: '0',
-    cursor: 'move',
-    backgroundImage: 'url("/img/sticker.png")', backgroundSize: "100%", backgroundRepeat: "no-repeat"
+    cursor: 'pointer',
+    backgroundImage: 'url("/img/sticker.png")', backgroundSize: "100% 100%", backgroundRepeat: "no-repeat"
 }
 
 export interface BoxProps {
@@ -18,6 +18,7 @@ export interface BoxProps {
     left: number
     top: number
     hideSourceOnDrag?: boolean
+    onDoubleClick?: () => void
     children?: ReactNode
 }
 
@@ -26,6 +27,7 @@ const Box: FC<BoxProps> = ({
                                left,
                                top,
                                hideSourceOnDrag,
+                               onDoubleClick,
                                children,
                            }) => {
     const [{isDragging}, drag] = useDrag(
@@ -48,6 +50,7 @@ const Box: FC<BoxProps> = ({
             ref={drag}
             style={{...style, left, top}}
             data-testid="box"
+            onDoubleClick={onDoubleClick}
         >
             {children}
         </div>
