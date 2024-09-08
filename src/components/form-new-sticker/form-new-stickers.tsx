@@ -1,34 +1,19 @@
 import React, {useState} from 'react';
-import {PlusOutlined} from '@ant-design/icons';
 import {
     Button,
-    Cascader,
-    Checkbox,
     ColorPicker,
     DatePicker,
     Form,
     Input,
-    InputNumber,
-    Radio,
-    Rate,
-    Select,
-    Slider,
     Switch,
-    TreeSelect,
-    Upload,
 } from 'antd';
 
 const {RangePicker} = DatePicker;
 const {TextArea} = Input;
 
-const normFile = (e: any) => {
-    if (Array.isArray(e)) {
-        return e;
-    }
-    return e?.fileList;
-};
-
 const FormNewStickers: React.FC = () => {
+
+    const [color, setColor] = useState<string>('#1677ff');
 
     return (
         <>
@@ -39,19 +24,27 @@ const FormNewStickers: React.FC = () => {
                 style={{maxWidth: 600}}
             >
                 <Form.Item style={{display: 'flex', alignItems: 'center'}} label="Название: ">
-                    <Input />
+                    <Input/>
                 </Form.Item>
                 <Form.Item label="Дата: ">
-                    <DatePicker/>
+                    <DatePicker format="DD-MM-YYYY"/>
                 </Form.Item>
                 <Form.Item label="Сроки: ">
-                    <RangePicker/>
+                    <RangePicker format="DD-MM-YYYY"/>
                 </Form.Item>
                 <Form.Item label="Описание: ">
                     <TextArea rows={4}/>
                 </Form.Item>
                 <Form.Item label="Цвет задачи: ">
-                    <ColorPicker/>
+                    <ColorPicker
+                        value={color}
+                        onChange={(c) => {
+                            setColor(c.toHexString());
+                        }}
+                    />
+                </Form.Item>
+                <Form.Item label="Исполнено" valuePropName="checked">
+                    <Switch/>
                 </Form.Item>
             </Form>
         </>

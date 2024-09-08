@@ -26,6 +26,10 @@ const NoBoards = () => {
         setIsModalOpen(false);
     };
 
+    const closeModal = () => {
+        setIsModalOpen(false);
+    }
+
     return (
         <>
             <Card
@@ -38,7 +42,6 @@ const NoBoards = () => {
                 style={{width: 300, cursor: 'pointer'}}
             >
                 <p>Автор:</p>
-                <p>Участники: </p>
                 <p>Срок:</p>
             </Card>
             <Modal
@@ -48,7 +51,7 @@ const NoBoards = () => {
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}>
-                <FormNewBoard/>
+                <FormNewBoard closeModal={closeModal}/>
             </Modal>
         </>
     );

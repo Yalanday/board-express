@@ -2,6 +2,8 @@ import React from 'react';
 import {Card, Flex} from 'antd';
 import NoBoards from "../no-boards/no-boards";
 import {Link} from "react-router-dom";
+import {useAppSelector} from "../../hooks/hooks";
+import {Board} from "../../redux/board-reducer";
 
 
 const stylesHeaderCard = {
@@ -21,41 +23,34 @@ const stylesHeaderCardDanger = {
 }
 
 const BoardsList = () => {
+
+    let {boards} = useAppSelector(state => state.boards);
+    console.log(Array.isArray(boards));
+
+
     return (
         <>
             <Flex gap={15} wrap={true}>
-                <Link to="/board/:id/">
-                    <Card
-                        type="inner"
-                        styles={stylesHeaderCard}
 
-                        onClick={() => {
-                            console.log('Создать доску')
-                        }}
-                        title="Доска желаний"
-                        style={{width: 300, cursor: 'pointer', borderColor: '#07233d'}}
-                    >
-                        <p>Автор: Петрушка</p>
-                        <p>Участники: 3</p>
-                        <p>Срок: Завтра</p>
-                    </Card>
-                </Link>
-                <Link to="/board/:id/">
-                    <Card
-                        type="inner"
-                        styles={stylesHeaderCardDanger}
+                {boards.map(
+                    (board: Board) => (
+                        <Link key={board.id} to={`/board/${board.id}/`}>
+                            <Card
+                                type="inner"
+                                styles={stylesHeaderCard}
 
-                        onClick={() => {
-                            console.log('Создать доску')
-                        }}
-                        title="Доска наказаний"
-                        style={{width: 300, cursor: 'pointer', borderColor: '#07233d'}}
-                    >
-                        <p>Автор: Алёнушка</p>
-                        <p>Участники: 5</p>
-                        <p>Срок: вчера</p>
-                    </Card>
-                </Link>
+                                onClick={() => {
+                                    console.log('Создать доску')
+                                }}
+                                title={board.title}
+                                style={{width: 300, cursor: 'pointer', borderColor: '#07233d'}}
+                            >
+                                <p>Автор: {board.author}</p>
+                                <p>Срок: {board.deadline}</p>
+                            </Card>
+                        </Link>
+                    ))}
+
                 <NoBoards/>
             </Flex>
         </>

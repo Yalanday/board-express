@@ -66,7 +66,7 @@ const Container: FC<ContainerProps> = ({hideSourceOnDrag, widthBoard, heightBoar
             title: string;
         };
     }>({
-        a: {top: 20, left: 80, title: "Летающая хуета по экрану"},
+        a: {top: 20, left: 80, title: "Летающая хуета по экрану Летающая хуета по экрану Летающая хуета по экрану Летающая хуета по экрану Летающая хуета по экрану Летающая хуета по экрану"},
         b: {top: 180, left: 20, title: "Вторая летающая хуета по экрану"},
     });
 
@@ -152,7 +152,15 @@ const Container: FC<ContainerProps> = ({hideSourceOnDrag, widthBoard, heightBoar
 
                             >x
                             </button>
-                            <h5 style={{paddingBottom: '3px'}}>{title}</h5>
+                            <h5 className="sticker-task-title" style={{paddingBottom: '3px'}}>{title}</h5>
+                            <div className="task-color-container">
+                                Цвет задачи:
+                                <span className="task-color"></span>
+                            </div>
+                            <div className="task-status-container">Cтатус: <span
+                                className="task-status">В процессе</span></div>
+
+
                         </div>
                     </Box>
                 );

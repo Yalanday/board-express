@@ -30,3 +30,31 @@ code {
 .box {
     background: none;
 }
+
+.sticker-task-title {
+    padding: 10px 0;
+    margin: 0 0 10px 0;
+    overflow: hidden;
+    max-height: 100px;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+
+}
+
+.task-color-container,
+.task-status-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.task-color {
+    display: block;
+    width: 30px;
+    height: 30px;
+    background-color: greenyellow;
+}
