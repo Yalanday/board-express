@@ -54,7 +54,7 @@ code {
 
 .task-color {
     display: block;
-    width: 30px;
-    height: 30px;
-    background-color: greenyellow;
+    width: 25px;
+    height: 25px;
+    border-radius: 25%;
 }

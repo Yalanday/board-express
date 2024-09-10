@@ -1,13 +1,20 @@
 import update from "immutability-helper";
 import React, {CSSProperties, FC} from "react";
-import {useCallback, useState} from "react";
+import {useCallback, useState, useEffect} from "react";
 import type {XYCoord} from "react-dnd";
 import {useDrop} from "react-dnd";
 import {Modal} from 'antd';
-
+import {setStickers} from "../../redux/board-reducer";
+import {setIdSticker} from "../../redux/id-sticker-reducer";
 import Box from "./box";
 import AddStickerButton from "../../ui/add-sticrer-button/add-sticker-button";
 import FormNewStickers from "../form-new-sticker/form-new-stickers";
+import {useAppDispatch, useAppSelector} from "../../hooks/hooks";
+
+const getRandomInteger = (min: number, max: number) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 
 export interface DragItem {
     type: string
@@ -35,15 +42,22 @@ const Container: FC<ContainerProps> = ({hideSourceOnDrag, widthBoard, heightBoar
     let widthValue = widthBoard - 50;
     let heightValue = heightBoard - 50;
 
+    const dispatch = useAppDispatch();
+    const {id} = useAppSelector(state => state.id);
+    let {boards} = useAppSelector(state => state.boards);
+    const currentBoard = boards.find(board => board.id === id);
+
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const showModal = () => {
+
+    const showModal = (key: string) => {
         setIsModalOpen(true);
+        console.log(key)
+        dispatch(setIdSticker(+key));
     };
 
     const handleOk = () => {
         setIsModalOpen(false);
-        console.log('стикер создан')
     };
 
     const handleCancel = () => {
@@ -54,7 +68,7 @@ const Container: FC<ContainerProps> = ({hideSourceOnDrag, widthBoard, heightBoar
         width: widthValue,
         height: heightValue,
         position: "relative",
-        backgroundImage: "url('https://impult.ru/preview/r/-x-/upload/iblock/713/zqc1afp43mhxvp4gzowqvh65c6fi6xnp.jpg')",
+        backgroundImage: `url(${currentBoard?.boardBg === undefined ? 'none' : currentBoard?.boardBg})`,
         backgroundRepeat: "no-repeat",
         backgroundSize: '100% 100%',
     };
@@ -64,12 +78,13 @@ const Container: FC<ContainerProps> = ({hideSourceOnDrag, widthBoard, heightBoar
             top: number;
             left: number;
             title: string;
+            color?: string;
+            status?: boolean;
+            data?: any;
+            deadline?: any;
+            description?: string;
         };
-    }>({
-        a: {top: 20, left: 80, title: "Летающая хуета по экрану Летающая хуета по экрану Летающая хуета по экрану Летающая хуета по экрану Летающая хуета по экрану Летающая хуета по экрану"},
-        b: {top: 180, left: 20, title: "Вторая летающая хуета по экрану"},
-    });
-
+    }>({...currentBoard?.stickers});
 
     const moveBox = useCallback(
         (id: string, left: number, top: number) => {
@@ -81,8 +96,21 @@ const Container: FC<ContainerProps> = ({hideSourceOnDrag, widthBoard, heightBoar
                 })
             );
         },
+
         [boxes, setBoxes]
     );
+
+    const setNewPosition = (id: any, leftData: number, topData: number) => {
+        let newBoxes = {...boxes};
+        newBoxes[id] = {
+            top: topData,
+            left: leftData,
+            title: boxes[id].title,
+            color: boxes[id].color,
+            status: boxes[id].status
+        }
+        dispatch(setStickers({currentBoard, newBoxes}));
+    }
 
     const [, drop] = useDrop(
         () => ({
@@ -92,6 +120,7 @@ const Container: FC<ContainerProps> = ({hideSourceOnDrag, widthBoard, heightBoar
                 const left = Math.round(item.left + delta.x);
                 const top = Math.round(item.top + delta.y);
                 moveBox(item.id, left, top);
+                setNewPosition(item.id, left, top);
                 return undefined;
             },
         }),
@@ -101,16 +130,42 @@ const Container: FC<ContainerProps> = ({hideSourceOnDrag, widthBoard, heightBoar
     const removeSticker = (keyV: string) => {
         const newBoxes = {...boxes};
         delete newBoxes[keyV];
-        setBoxes(newBoxes)
+        setBoxes(newBoxes);
+        dispatch(setStickers({currentBoard, newBoxes}));
+    }
+
+
+    const addSticker = () => {
+        const newBoxes = {...boxes};
+        newBoxes[getRandomInteger(1, 10000000)] = {
+            top: getRandomInteger(40, 85),
+            left: getRandomInteger(100, 200),
+            title: "Новая задача",
+            color: 'blue',
+            status: false,
+        }
+        setBoxes(newBoxes);
+        dispatch(setStickers({currentBoard, newBoxes}));
+    }
+
+    const renderson = (arg: any) => {
+        setBoxes(arg)
+    }
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        Modal.destroyAll()
     }
 
     return (
         <div ref={drop} style={styles}>
             {Object.keys(boxes).map((key) => {
-                const {left, top, title} = boxes[key] as {
+                const {left, top, title, color, status} = boxes[key] as {
                     top: number;
                     left: number;
                     title: string;
+                    color?: string;
+                    status?: boolean;
                 };
                 return (
                     <Box
@@ -120,7 +175,9 @@ const Container: FC<ContainerProps> = ({hideSourceOnDrag, widthBoard, heightBoar
                         top={top}
                         hideSourceOnDrag={hideSourceOnDrag}
 
-                        onDoubleClick={showModal}
+                        onDoubleClick={() => {
+                            showModal(key)
+                        }}
                     >
 
                         <div style={{
@@ -149,40 +206,38 @@ const Container: FC<ContainerProps> = ({hideSourceOnDrag, widthBoard, heightBoar
                                     cursor: 'pointer',
                                     outline: 'none'
                                 }}
-
-                            >x
+                            >&#10008;
                             </button>
                             <h5 className="sticker-task-title" style={{paddingBottom: '3px'}}>{title}</h5>
                             <div className="task-color-container">
                                 Цвет задачи:
-                                <span className="task-color"></span>
+                                <span className="task-color" style={{backgroundColor: `${color}`}}></span>
                             </div>
-                            <div className="task-status-container">Cтатус: <span
-                                className="task-status">В процессе</span></div>
-
-
+                            <div className="task-status-container">Cтатус:
+                                <span
+                                    className="task-status">
+                                        {status && "Выполнено"}
+                                    {!status && "В процессе"}
+                                </span>
+                            </div>
                         </div>
                     </Box>
                 );
             })}
-            <AddStickerButton onClick={() => {
-                setBoxes({
-                    ...boxes, c: {
-                        top: 60,
-                        left: 150,
-                        title: "Новая хуета на экране"
-                    }
-                })
-            }}/>
+            <AddStickerButton
+                onClick={addSticker}
+            />
             <Modal
+                destroyOnClose={true}
                 width={430}
                 cancelText="Отмена"
-                title="Создать стикер"
+                title="Редактор стикера"
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
+                footer={false}
             >
-                <FormNewStickers/>
+                <FormNewStickers closeModal={handleCloseModal} renderson={renderson}/>
             </Modal>
         </div>
     );
