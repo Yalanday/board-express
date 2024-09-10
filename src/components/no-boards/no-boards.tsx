@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Card, Modal} from 'antd';
 import FormNewBoard from "../form-new-board/form-new-board";
 
+
 const stylesHeaderCard = {
     header: {
         background: '#07233d',
@@ -30,6 +31,7 @@ const NoBoards = () => {
         setIsModalOpen(false);
     }
 
+
     return (
         <>
             <Card
@@ -41,8 +43,7 @@ const NoBoards = () => {
                 title="Создать доску"
                 style={{width: 300, cursor: 'pointer'}}
             >
-                <p>Автор:</p>
-                <p>Срок:</p>
+                <span>Для создания доски, нажмите на эту карточку</span>
             </Card>
             <Modal
                 width={330}

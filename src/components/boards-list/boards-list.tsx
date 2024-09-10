@@ -2,8 +2,9 @@ import React from 'react';
 import {Card, Flex} from 'antd';
 import NoBoards from "../no-boards/no-boards";
 import {Link} from "react-router-dom";
-import {useAppSelector} from "../../hooks/hooks";
-import {Board} from "../../redux/board-reducer";
+import {Board, delBoard} from "../../redux/board-reducer";
+import {useAppSelector, useAppDispatch} from "../../hooks/hooks";
+import {setId} from "../../redux/id-reducer";
 
 
 const stylesHeaderCard = {
@@ -25,8 +26,11 @@ const stylesHeaderCardDanger = {
 const BoardsList = () => {
 
     let {boards} = useAppSelector(state => state.boards);
-    console.log(Array.isArray(boards));
+    const dispatch = useAppDispatch();
 
+    const deleteBoards = () => {
+
+    }
 
     return (
         <>
@@ -40,13 +44,34 @@ const BoardsList = () => {
                                 styles={stylesHeaderCard}
 
                                 onClick={() => {
-                                    console.log('Создать доску')
+                                    dispatch(setId(board.id));
                                 }}
                                 title={board.title}
                                 style={{width: 300, cursor: 'pointer', borderColor: '#07233d'}}
                             >
                                 <p>Автор: {board.author}</p>
-                                <p>Срок: {board.deadline}</p>
+                                <button
+
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        dispatch(delBoard(board.id));
+                                    }}
+
+                                    style={{
+                                        position: 'absolute',
+                                        top: '10px',
+                                        right: '10px',
+                                        fontSize: '20px',
+                                        color: '#ffffff',
+                                        backgroundColor: 'transparent',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        outline: 'none',
+                                        zIndex: '150'
+                                    }}
+                                >&#10006;
+                                </button>
+
                             </Card>
                         </Link>
                     ))}

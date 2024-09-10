@@ -41,19 +41,40 @@ const FormNewBoard: React.FC<FormNewBoardProps> = ({closeModal}) => {
     const {boards} = useAppSelector(state => state.boards);
     const dispatch = useAppDispatch();
 
+    const createIdBoard = (): number => {
+        let boardId = 0;
+        if (boards.length === 0) {
+            return boardId = 1;
+        }
+        console.log(boardId)
+        return boardId = boards[boards.length - 1].id + 1;;
+    }
+
+    const createTitleBoard = (name: string): any => {
+        let title = name;
+        if (name.includes(name)) {
+            let count = 2
+            boards.forEach(board => {
+                if (board.title.includes(name)) {
+                    title = name + ' ' + String(count);
+                    count++;
+                }
+            })
+        }
+        return title;
+    }
+
     const onFinish = (e: any) => {
-        console.log(e.newBoard.rightsBoard)
         const newBoard = {
-            id: boards.length + 1,
+            id: createIdBoard(),
             boardBg: e.newBoard.boardBg,
-            title: e.newBoard.boardName,
+            title: createTitleBoard(e.newBoard.boardName),
             author: e.newBoard.boardAuthor,
             rightsBoard: e.newBoard.rightsBoard,
         };
         dispatch(setBoard(newBoard));
         boardForm.resetFields();
         closeModal();
-
     };
 
     const [valueBg, setValueBg] = useState('all');
@@ -66,14 +87,12 @@ const FormNewBoard: React.FC<FormNewBoardProps> = ({closeModal}) => {
         setValueBg(e.target.value);
     };
 
-
     const arrBgRadio: string[] = [
         "https://avatars.mds.yandex.net/i?id=2b29bb1604a6e412345c9c400ef273f6_l-5427734-images-thumbs&n=13",
         "https://i.artfile.ru/1920x1080_1476119_[www.ArtFile.ru].jpg",
         "https://i.pinimg.com/originals/f8/ad/f1/f8adf1e86a9ad38dc6240c5e8a90049c.jpg",
         "https://impult.ru/preview/r/-x-/upload/iblock/713/zqc1afp43mhxvp4gzowqvh65c6fi6xnp.jpg"
     ]
-
 
     return (
         <Form
@@ -101,21 +120,21 @@ const FormNewBoard: React.FC<FormNewBoardProps> = ({closeModal}) => {
                     </Radio.Group>
 
                 </MyFormItem>
-                <MyFormItem name="boardName" label="Название доски" initialValue={'Новая доска'} required>
+                <MyFormItem
+                    name="boardName"
+                    label="Название доски"
+                    initialValue={'Новая доска'}
+                    rules={[{required: true, message: 'Введите название доски'}]}
+                    required>
                     <Input/>
                 </MyFormItem>
-                <MyFormItem name="boardAuthor" label="Автор" initialValue={''} required>
+                <MyFormItem
+                    name="boardAuthor"
+                    label="Автор"
+                    initialValue={''}
+                    rules={[{required: true, message: 'Пожалуйста введите имя'}]}
+                    required>
                     <Input/>
-                </MyFormItem>
-                <MyFormItem name="rightsBoard" label="Доступность доски" initialValue={'all'}>
-                    <Select
-                        style={{width: '100%'}}
-                        onChange={handleChange}
-                        options={[
-                            {value: 'all', label: 'Всем', selected: true},
-                            {value: 'invited', label: 'Приглашенным'},
-                        ]}
-                    />
                 </MyFormItem>
             </MyFormItemGroup>
 

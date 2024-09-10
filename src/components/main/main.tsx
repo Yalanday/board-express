@@ -15,8 +15,6 @@ type MainProps = {
 const Main: React.FC<MainProps> = ({isHaveBoards}) => {
 
     const boardsListRef = useRef<HTMLDivElement>(null);
-    // let widthValue = Number(boardsListRef.current?.clientWidth);
-    // let heightValue = Number(boardsListRef.current?.clientHeight);
 
     const [widthValue, setWidthValue] = useState<number>(0);
     const [heightValue, setHeightValue] = useState<number>(0);
